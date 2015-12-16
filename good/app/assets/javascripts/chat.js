@@ -8,7 +8,7 @@ var ws = new WebSocket(messagesContainer.data("ws-url"));
 
 ws.onmessage = function(event)  {
     var message = JSON.parse(event.data);
-    messagesContainer.append(newMessage({"username":message.user, "message":message.text}));
+    messagesContainer.append(newMessage({"username":message.username, "message":message.text}));
 };
 
 $( "#message-form" ).submit(function( event ) {
