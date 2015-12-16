@@ -4,11 +4,14 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /user/create                controllers.Application.create
-GET     /user/save                  controllers.Application.save
 GET     /chat                       controllers.Chat.index
 GET     /chat/socket                controllers.Chat.socket
 
+GET     /secret                     controllers.Application.secret
+GET     /user/create                controllers.Authentication.create
+POST    /user/create                controllers.Authentication.register
+GET     /user/login                 controllers.Authentication.login
+POST    /user/login                 controllers.Authentication.authenticate
 
 
 # Map static resources from the /public folder to the /assets URL path
