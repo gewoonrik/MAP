@@ -1,3 +1,5 @@
+package controllers
+
 import models.User
 import play.api.mvc.Cookie
 
