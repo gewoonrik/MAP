@@ -6,6 +6,9 @@
 GET     /                           controllers.Application.index
 GET     /user/create                controllers.Application.create
 GET     /user/save                  controllers.Application.save
+GET     /chat                       controllers.Chat.index
+GET     /chat/socket                controllers.Chat.socket
+
 
 
 # Map static resources from the /public folder to the /assets URL path

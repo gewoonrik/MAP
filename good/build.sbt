@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   specs2 % Test,
   "com.typesafe.play" %% "anorm" % "2.4.0",
   "org.webjars" % "jquery" % "2.1.4",
-  "org.webjars" % "bootstrap" % "3.3.5"
+  "org.webjars" % "bootstrap" % "3.3.5",
+  "org.webjars" % "handlebars" % "4.0.2"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
