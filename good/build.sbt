@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test,
-  "com.typesafe.play" %% "anorm" % "2.4.0",
+  "com.typesafe.play" %% "anorm" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.3.5",
   "com.github.rjeschke" % "txtmark" % "0.13"
 
