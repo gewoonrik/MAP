@@ -48,7 +48,7 @@ class Authentication extends Controller {
         User.findByCredentials(user.username, user.password).map((i: Long) =>
           Home
             .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
-            .withCookies(Cookie("id", i.toString))
+            .withSession(request.session + ("id" -> i.toString))
         ).getOrElse(BadRequest("Invalid credentials"))
       }
     )

@@ -9,7 +9,7 @@ object Authenticated extends AuthenticatedBuilder(AuthenticationUtils.fromReques
 
 object AuthenticationUtils {
   def fromRequest(requestHeader: RequestHeader) =
-    requestHeader.cookies.get("id").flatMap(
-      (c: Cookie) => User.findById(c.value.toInt)
+    requestHeader.session.get("id").flatMap(
+      id => User.findById(id.toInt)
     )
 }
