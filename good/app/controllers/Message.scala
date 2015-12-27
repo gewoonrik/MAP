@@ -7,4 +7,11 @@ class Message extends Controller {
   def list = (Authenticated andThen Authorized) {
     Ok(views.html.messages(Message.getAll))
   }
+
+  def truncate = (Authenticated andThen Authorized) {
+    val deleted = Message.deleteAll()
+
+    Redirect(routes.Message.list())
+      .flashing("success" -> s"Removed ${deleted} chats!")
+  }
 }

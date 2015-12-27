@@ -9,6 +9,7 @@ GET         /chat                controllers.Chat.index
 GET         /chat/socket         controllers.Chat.socket
 
 GET         /message             controllers.Message.list
+POST        /message/truncate    controllers.Message.truncate
 
 GET         /secret              controllers.Application.secret
 GET         /user/create         controllers.Authentication.create

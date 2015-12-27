@@ -1,4 +1,7 @@
 @(messages: List[models.Message])
+
+@import helper._
+
 @main {
     <h2>Chats</h2>
 
@@ -20,4 +23,12 @@
         }
         </tbody>
     </table>
+
+    @form(routes.Message.truncate()) {
+
+        <div class="actions">
+            <input type="submit" value="Truncate" class="btn btn-danger">
+        </div>
+
+    }
 }
