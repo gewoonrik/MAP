@@ -7,7 +7,6 @@ import scala.concurrent.Future
 
 object Authorized extends ActionFilter[AuthenticatedRequest] {
   def filter[A](req: AuthenticatedRequest[A]) = Future.successful {
-    println(req.user)
     if (!req.user.admin)
       Some(Unauthorized(views.html.defaultpages.unauthorized()))
     else

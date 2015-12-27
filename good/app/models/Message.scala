@@ -3,20 +3,12 @@ package models
 import anorm.SqlParser._
 import anorm._
 import org.joda.time.DateTime
-import play.api.db.DB
 import play.api.Play.current
+import play.api.db.DB
 
-
-
-/**
-  * Created by rik on 27/12/15.
-  */
-case class Message(user : String, text : String, timeSent: DateTime)
+case class Message(user: String, text: String, timeSent: DateTime)
 
 object Message {
-
-  // -- Parsers
-
 
   /**
     * Parse a User from a ResultSet
@@ -27,15 +19,11 @@ object Message {
     }
   }
 
-
-
   def getAll = {
     DB.withConnection { implicit connection =>
       SQL("select * from message ORDER BY timeSent ASC").as(Message.simple *)
     }
   }
-
-
 
   /**
     * Insert a new message.

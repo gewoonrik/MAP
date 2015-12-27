@@ -1,0 +1,23 @@
+@(messages: List[models.Message])
+@main {
+    <h2>Chats</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+        @messages.map {
+            case message => {
+                <tr>
+                    <td>@message.user</td>
+                    <td>@message.text</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+}
