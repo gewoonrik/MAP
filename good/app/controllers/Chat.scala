@@ -20,6 +20,10 @@ class Chat @Inject()(system: ActorSystem) extends Controller {
       Ok(views.html.chat(request))
   }
 
+  def list = (Authenticated andThen Authorized) {
+    Ok(views.html.chatList(List()))
+  }
+
   def socket = WebSocket.tryAcceptWithActor[String, JsValue] { reqHeader =>
     AuthenticationUtils.fromRequest(reqHeader) match {
       case Some(user) => Future(Right(ChatSocket.props(chatRoom, user.username) _))

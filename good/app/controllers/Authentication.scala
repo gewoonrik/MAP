@@ -13,7 +13,9 @@ class Authentication extends Controller {
     mapping(
       "username" -> text,
       "password" -> text
-    )(User.apply)(User.unapply)
+    )
+    ((username, password) => User(username, password))
+    ((user: User) => Some(user.username, user.password))
   )
 
   val Home = Redirect(routes.Application.index())
@@ -28,7 +30,15 @@ class Authentication extends Controller {
     userForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       user => {
-        User.insert(user)
+        if (User.isEmpty) {
+          User.insert(User(
+            username = user.username,
+            password = user.password,
+            admin = true
+          ))
+        } else {
+          User.insert(user)
+        }
 
         Home.flashing("success" -> "You are registered!")
       }
@@ -45,7 +55,7 @@ class Authentication extends Controller {
     userForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       user => {
-        User.findByCredentials(user.username, user.password).map((i: Long) =>
+        User.findIdByCredentials(user.username, user.password).map((i: Long) =>
           Home
             .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
             .withSession(request.session + ("id" -> i.toString))

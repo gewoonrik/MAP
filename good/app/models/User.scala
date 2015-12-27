@@ -7,28 +7,16 @@ import play.api.db._
 
 import scala.language.postfixOps
 
-case class User(username: String, password: String)
+case class User(username: String, password: String, admin: Boolean = false)
 
 object User {
-
-  // -- Parsers
-
 
   /**
     * Parse a User from a ResultSet
     */
   val simple = {
-    get[String]("user.username") ~ get[String]("user.password") map {
-      case username ~ password => User(username, password)
-    }
-  }
-
-  /**
-    * Parse an ID from a ResultSet
-    */
-  val id = {
-    get[Long]("user.id") map {
-      case id => id
+    get[String]("user.username") ~ get[String]("user.password") ~ get[Boolean]("user.admin") map {
+      case username ~ password ~ admin => User(username, password, admin)
     }
   }
 
@@ -37,23 +25,38 @@ object User {
     */
   def findById(id: Long) = {
     DB.withConnection { implicit connection =>
-      SQL("select * from user where id = {id}").on('id -> id).as(User.simple.singleOpt)
+      SQL("select * from user where id = {id}").on('id -> id).as(simple.singleOpt)
     }
   }
 
   /**
     * Get a user ID by its username and password
     */
-  def findByCredentials(username: String, password: String) = {
+  def findIdByCredentials(username: String, password: String) = {
     DB.withConnection { implicit connection =>
-      SQL("select * from user where username = {username} AND password = {password}")
+      SQL("select id from user where username = {username} AND password = {password}")
         .on(
           'username -> username,
           'password -> password
         )
-        .as(User.id.singleOpt)
+        .as(scalar[Long].singleOpt)
     }
   }
+
+  /**
+    * Count number of users
+    */
+  def count() = {
+    DB.withConnection { implicit connection =>
+      SQL("select count(*) from user")
+        .as(scalar[Long].single)
+    }
+  }
+
+  /**
+    * Check whether the user table is empty
+    */
+  def isEmpty = count() == 0
 
   /**
     * Insert a new user.
@@ -66,11 +69,13 @@ object User {
         """
           insert into user set
             username = {username},
-            password = {password}
+            password = {password},
+            admin = {admin}
         """
       ).on(
         'username -> user.username,
-        'password -> user.password
+        'password -> user.password,
+        'admin -> user.admin
       ).executeUpdate()
     }
   }

@@ -6,6 +6,7 @@
 GET     /                           controllers.Application.index
 GET     /chat                       controllers.Chat.index
 GET     /chat/socket                controllers.Chat.socket
+GET     /chat/list                  controllers.Chat.list
 
 GET     /secret                     controllers.Application.secret
 GET     /user/create                controllers.Authentication.create
