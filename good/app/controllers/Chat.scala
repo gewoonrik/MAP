@@ -1,18 +1,15 @@
 package controllers
 
 import javax.inject._
-import actors.{ChatSocket, ChatRoom}
+
+import actors.{ChatRoom, ChatSocket}
 import akka.actor.ActorSystem
-import models.User
+import play.api.Play.current
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
-import play.api.mvc.Results._
-import play.api.mvc.{Cookie, Request, WebSocket, Controller}
-import play.mvc.Results.Status
+import play.api.mvc.{Controller, WebSocket}
 
 import scala.concurrent.Future
-import play.api.Play.current
-
-import scala.util.Success
 
 @Singleton
 class Chat @Inject()(system: ActorSystem) extends Controller {
@@ -24,9 +21,9 @@ class Chat @Inject()(system: ActorSystem) extends Controller {
   }
 
   def socket = WebSocket.tryAcceptWithActor[String, JsValue] { reqHeader =>
-    Future(AuthenticationUtils.fromRequest(reqHeader) match {
-      case Some(user) => Right(ChatSocket.props(chatRoom, user.username))
-      case None => Left(Forbidden)
-    })
+    AuthenticationUtils.fromRequest(reqHeader) match {
+      case Some(user) => Future(Right(ChatSocket.props(chatRoom, user.username) _))
+      case None => Future(Left(Forbidden))
+    }
   }
 }
