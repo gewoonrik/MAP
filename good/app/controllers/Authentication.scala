@@ -78,13 +78,9 @@ class Authentication extends Controller {
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       user => {
-        User
-          .findByCredentials(user.username, user.password)
-          .map((user: User) =>
-            Home
-              .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
-              .withSession(request.session + ("username" -> user.username))
-          ).getOrElse(BadRequest("Invalid credentials"))
+        Home
+          .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
+          .withSession(request.session + ("username" -> user.username))
       }
     )
   }
