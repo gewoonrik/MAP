@@ -21,7 +21,7 @@ object Authenticated extends ActionBuilder[AuthenticatedRequest] {
 
 object AuthenticationUtils {
   def fromRequest(requestHeader: RequestHeader) =
-    requestHeader.session.get("id").flatMap(
+    requestHeader.session.get("username").flatMap(
       id => User.findById(id.toInt)
     )
 }
