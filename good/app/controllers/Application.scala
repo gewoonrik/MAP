@@ -6,7 +6,9 @@ import play.api.mvc._
 
 class Application extends Controller {
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    implicit request =>
+    val user = AuthenticationUtils.fromRequest(request)
+    Ok(views.html.index(user))
   }
 
   def secret = Authenticated { implicit request =>

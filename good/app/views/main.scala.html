@@ -21,18 +21,20 @@
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
     </head>
     <body>
-        <header class="topbar">
-            <h1 class="fill">
-                <a href="@routes.Application.index()">
-                    Fancy chat application
-                </a>
-            </h1>
-        </header>
+        <div class="container">
 
-        <section id="main">
-            <div class="container">
-                @content
-            </div>
-        </section>
+            <header class="topbar">
+                <h1 class="fill">
+                    <a href="@routes.Application.index()">
+                        Fancy chat application
+                    </a>
+                </h1>
+            </header>
+
+            <section id="main">
+                    @content
+
+            </section>
+        </div>
     </body>
 </html>
