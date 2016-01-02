@@ -15,8 +15,8 @@ libraryDependencies ++= Seq(
   filters,
   "com.typesafe.play" %% "anorm" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.3.5",
-  "com.github.rjeschke" % "txtmark" % "0.13"
-
+  "com.github.rjeschke" % "txtmark" % "0.13",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"

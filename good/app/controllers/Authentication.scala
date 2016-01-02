@@ -1,6 +1,7 @@
 package controllers
 
 import models.User
+import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
@@ -13,8 +14,10 @@ class Authentication extends Controller {
       "username" -> nonEmptyText,
       "password" -> nonEmptyText
     )
-    ((username, password) => User(username, password))
-    ((user: User) => Some(user.username, user.password))
+    ((username, password) =>
+      User(username, BCrypt.hashpw(password, BCrypt.gensalt())))
+    ((user: User) =>
+      Some(user.username, ""))
   )
 
   val loginForm = Form(
@@ -22,10 +25,12 @@ class Authentication extends Controller {
       "username" -> nonEmptyText,
       "password" -> nonEmptyText
     )
-    ((username, password) => User(username, password))
-    ((user: User) => Some(user.username, user.password))
+    ((username, password) =>
+      User(username, password))
+    ((user: User) =>
+      Some(user.username, user.password))
     verifying ("Invalid username or password", u =>
-      User.findIdByCredentials(u.username, u.password).isDefined
+      User.findByCredentials(u.username, u.password).isDefined
     )
   )
 
@@ -73,11 +78,13 @@ class Authentication extends Controller {
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       user => {
-        User.findIdByCredentials(user.username, user.password).map((i: Long) =>
-          Home
-            .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
-            .withSession(request.session + ("id" -> i.toString))
-        ).getOrElse(BadRequest("Invalid credentials"))
+        User
+          .findByCredentials(user.username, user.password)
+          .map((user: User) =>
+            Home
+              .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
+              .withSession(request.session + ("username" -> user.username))
+          ).getOrElse(BadRequest("Invalid credentials"))
       }
     )
   }

@@ -2,6 +2,7 @@ package models
 
 import anorm.SqlParser._
 import anorm._
+import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import play.api.db._
 
@@ -34,15 +35,15 @@ object User {
   /**
     * Get a user ID by its username and password
     */
-  def findIdByCredentials(username: String, password: String) = {
-    DB.withConnection { implicit connection =>
-      SQL("select id from user where username = {username} AND password = {password}")
-        .on(
-          'username -> username,
-          'password -> password
-        )
-        .as(scalar[Long].singleOpt)
+  def findByCredentials(username: String, password: String) = {
+    val user = DB.withConnection { implicit connection =>
+      SQL("select * from user where username = {username}")
+        .on('username -> username)
+        .as(User.simple.singleOpt)
     }
+
+    user
+      .filter(u => BCrypt.checkpw(password, u.password))
   }
 
   /**
@@ -61,7 +62,7 @@ object User {
   def isEmpty = count() == 0
 
   /**
-    * Insert a new user.
+    * Insert a new user
     *
     * @param user The user values.
     */
