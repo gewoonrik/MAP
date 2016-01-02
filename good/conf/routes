@@ -15,6 +15,7 @@ GET         /secret              controllers.Application.secret
 GET         /user/create         controllers.Authentication.create
 POST        /user/create         controllers.Authentication.register
 GET         /user/login          controllers.Authentication.login
+POST        /user/logout          controllers.Authentication.logout
 POST        /user/login          controllers.Authentication.authenticate
 
 

@@ -6,7 +6,6 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
-import play.api.mvc.Cookie
 
 class Authentication extends Controller {
   val userForm = Form(
@@ -50,6 +49,13 @@ class Authentication extends Controller {
   def login = Action { implicit request =>
     Ok(views.html.login(userForm))
   }
+
+  def logout =
+    Action {
+      implicit request =>
+      Redirect(routes.Application.index).withSession(request.session - "id")
+    }
+
 
   def authenticate = Action { implicit request =>
     userForm.bindFromRequest.fold(

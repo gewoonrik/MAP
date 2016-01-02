@@ -1,4 +1,6 @@
-@(user: Option[User])(implicit messages: Messages)
+@import views.html.helper.form
+@import views.html.helper.CSRF
+@(user: Option[User])(implicit messages: Messages, request: RequestHeader)
 
     @main {
 
@@ -10,6 +12,12 @@
         <ul>
             @if(user.isDefined) {
                 <li><a href="@routes.Chat.index()">Chat</a></li>
+                <li>
+                @form(CSRF(routes.Authentication.logout())) {
+                    <input class="logout-link" type="submit" value="Logout" class="btn primary">
+                    }
+                </li>
+
             } else {
                 <li><a href="@routes.Authentication.register()">Register</a></li>
                 <li><a href="@routes.Authentication.login()">Login</a></li>
