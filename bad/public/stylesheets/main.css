@@ -1,0 +1,18 @@
+p.username {
+    font-weight: bold;
+}
+
+.logout-link
+{
+    background-color: transparent;
+    display: inline;
+    padding:0px;
+    text-decoration: underline;
+    border: none;
+    color: #337ab7;
+    cursor: pointer;
+}
+
+.logout-link:focus {
+    outline: none;
+}

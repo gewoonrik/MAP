@@ -1,0 +1,22 @@
+@(userForm: Form[User])(implicit messages: Messages, request: RequestHeader)
+
+@import helper._
+
+@main {
+
+    <h1>Register</h1>
+
+    @form(CSRF(routes.Authentication.register())) {
+
+        <fieldset>
+            @inputText(userForm("username"), '_label -> "Username", '_help -> "")
+            @inputPassword(userForm("password"), '_label -> "Password", '_help -> "")
+        </fieldset>
+
+        <div class="actions">
+            <input type="submit" value="Register" class="btn primary">
+        </div>
+
+    }
+
+}

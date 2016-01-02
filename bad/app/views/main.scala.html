@@ -1,0 +1,44 @@
+@(content: Html)(implicit request: RequestHeader)
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat app</title>
+
+        @*************************************
+        <link rel='stylesheet' href='@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")'>
+        <link rel='stylesheet' href='@routes.Assets.at("lib/font-awesome/css/font-awesome.min.css")'>
+
+        <script src="@routes.Assets.at("lib/jquery/jquery.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("lib/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+        *************************************@
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js" type="text/javascript"></script>
+
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
+    </head>
+    <body>
+        <div class="container">
+            <header class="topbar">
+                <h1 class="fill">
+                    <a href="@routes.Application.index()">
+                        Fancy chat application
+                    </a>
+                </h1>
+            </header>
+
+            <section id="main">
+                @request.flash.get("success").map { message =>
+                    <div class="alert alert-success">
+                        @message
+                    </div>
+                }
+
+                @content
+            </section>
+        </div>
+    </body>
+</html>

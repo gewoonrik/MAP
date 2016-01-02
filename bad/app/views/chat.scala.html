@@ -1,0 +1,20 @@
+@import play.filters.csrf.CSRF
+@(implicit request: RequestHeader)
+
+@main {
+    <h1>Chat</h1>
+
+    <div data-ws-url="@routes.Chat.socket().webSocketURL()?csrfToken=@CSRF.getToken(request).get.value" id="messages">
+
+    </div>
+    @handlebars("message-template") {
+        <p class="username">{{user}}</p>
+        <p class="message">{{{message}}}</p>
+    }
+    <form id="message-form" action="#">
+        Message
+        <input id="message-input" type="text"/>
+        <input id="submit-message" type="submit" value="send"/>
+    </form>
+    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/chat.js")'></script>
+}

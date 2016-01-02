@@ -1,0 +1,30 @@
+@(userForm: Form[User])(implicit messages: Messages, request : play.api.mvc.RequestHeader)
+
+@import helper._
+
+@main {
+
+    <h1>Login</h1>
+
+    @if(userForm.hasGlobalErrors) {
+        <ul>
+        @for(error <- userForm.globalErrors) {
+            <li>@error.message</li>
+        }
+        </ul>
+    }
+
+    @form(CSRF(routes.Authentication.authenticate())) {
+
+        <fieldset>
+            @inputText(userForm("username"), '_label -> "Username", '_help -> "")
+            @inputPassword(userForm("password"), '_label -> "Password", '_help -> "")
+        </fieldset>
+
+        <div class="actions">
+            <input type="submit" value="Login" class="btn primary">
+        </div>
+
+    }
+
+}
