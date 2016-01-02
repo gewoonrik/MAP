@@ -1,4 +1,4 @@
-@(content: Html)
+@(content: Html)(implicit request: RequestHeader)
 
 <!DOCTYPE html>
 <html>
@@ -22,7 +22,6 @@
     </head>
     <body>
         <div class="container">
-
             <header class="topbar">
                 <h1 class="fill">
                     <a href="@routes.Application.index()">
@@ -32,8 +31,13 @@
             </header>
 
             <section id="main">
-                    @content
+                @request.flash.get("success").map { message =>
+                    <div class="alert alert-success">
+                        @message
+                    </div>
+                }
 
+                @content
             </section>
         </div>
     </body>
