@@ -1,4 +1,4 @@
-@(userForm: Form[User])(implicit messages: Messages)
+@(userForm: Form[User])(implicit messages: Messages, request : play.api.mvc.RequestHeader)
 
 @import helper._
 
@@ -8,7 +8,7 @@
 
     <h1>Login</h1>
 
-    @form(routes.Authentication.authenticate()) {
+    @form(CSRF(routes.Authentication.authenticate())) {
 
         <fieldset>
             @inputText(userForm("username"), '_label -> "Username", '_help -> "")

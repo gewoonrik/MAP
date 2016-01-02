@@ -1,4 +1,4 @@
-@(messages: List[models.Message])
+@(messages: List[models.Message])(implicit request : play.api.mvc.RequestHeader)
 
 @import helper._
 
@@ -24,7 +24,7 @@
         </tbody>
     </table>
 
-    @form(routes.Message.truncate()) {
+    @form(CSRF(routes.Message.truncate())) {
 
         <div class="actions">
             <input type="submit" value="Truncate" class="btn btn-danger">

@@ -22,7 +22,7 @@ class Authentication extends Controller {
 
   // Register
 
-  def create = Action {
+  def create = Action { implicit request =>
     Ok(views.html.create(userForm))
   }
 
@@ -47,7 +47,7 @@ class Authentication extends Controller {
 
   // Login
 
-  def login = Action {
+  def login = Action { implicit request =>
     Ok(views.html.login(userForm))
   }
 
