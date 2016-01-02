@@ -10,8 +10,8 @@ import play.api.mvc._
 class Authentication extends Controller {
   val userForm = Form(
     mapping(
-      "username" -> text,
-      "password" -> text
+      "username" -> nonEmptyText,
+      "password" -> nonEmptyText
     )
     ((username, password) => User(username, password))
     ((user: User) => Some(user.username, user.password))
@@ -27,7 +27,9 @@ class Authentication extends Controller {
 
   def register = Action { implicit request =>
     userForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.login(formWithErrors)),
+      formWithErrors => {
+        BadRequest(views.html.create(formWithErrors))
+      },
       user => {
         if (User.isEmpty) {
           User.insert(User(
