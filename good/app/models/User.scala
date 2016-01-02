@@ -7,10 +7,12 @@ import play.api.db._
 
 import scala.language.postfixOps
 
-case class User(username: String, password: String, admin: Boolean = false)
+case class User(username: String, password: String, admin: Boolean = false) {
+  def toAdmin =
+    copy(admin = true)
+}
 
 object User {
-
   /**
     * Parse a User from a ResultSet
     */
