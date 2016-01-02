@@ -8,7 +8,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
 
 class Authentication extends Controller {
-  val userForm = Form(
+  val registerForm = Form(
     mapping(
       "username" -> nonEmptyText,
       "password" -> nonEmptyText
@@ -17,16 +17,28 @@ class Authentication extends Controller {
     ((user: User) => Some(user.username, user.password))
   )
 
+  val loginForm = Form(
+    mapping(
+      "username" -> nonEmptyText,
+      "password" -> nonEmptyText
+    )
+    ((username, password) => User(username, password))
+    ((user: User) => Some(user.username, user.password))
+    verifying ("Invalid username or password", u =>
+      User.findIdByCredentials(u.username, u.password).isDefined
+    )
+  )
+
   val Home = Redirect(routes.Application.index())
 
   // Register
 
   def create = Action { implicit request =>
-    Ok(views.html.create(userForm))
+    Ok(views.html.create(registerForm))
   }
 
   def register = Action { implicit request =>
-    userForm.bindFromRequest.fold(
+    registerForm.bindFromRequest.fold(
       formWithErrors => {
         BadRequest(views.html.create(formWithErrors))
       },
@@ -49,18 +61,18 @@ class Authentication extends Controller {
   // Login
 
   def login = Action { implicit request =>
-    Ok(views.html.login(userForm))
+    Ok(views.html.login(loginForm))
   }
 
   def logout =
     Action {
       implicit request =>
-      Redirect(routes.Application.index).withSession(request.session - "id").flashing("success" -> "You have succesfully been logged out!")
+      Redirect(routes.Application.index()).withSession(request.session - "id").flashing("success" -> "You have succesfully been logged out!")
     }
 
 
   def authenticate = Action { implicit request =>
-    userForm.bindFromRequest.fold(
+    loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
       user => {
         User.findIdByCredentials(user.username, user.password).map((i: Long) =>

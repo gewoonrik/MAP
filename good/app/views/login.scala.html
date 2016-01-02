@@ -6,6 +6,14 @@
 
     <h1>Login</h1>
 
+    @if(userForm.hasGlobalErrors) {
+        <ul>
+        @for(error <- userForm.globalErrors) {
+            <li>@error.message</li>
+        }
+        </ul>
+    }
+
     @form(CSRF(routes.Authentication.authenticate())) {
 
         <fieldset>
