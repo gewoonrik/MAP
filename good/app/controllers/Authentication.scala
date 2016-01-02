@@ -53,7 +53,7 @@ class Authentication extends Controller {
   def logout =
     Action {
       implicit request =>
-      Redirect(routes.Application.index).withSession(request.session - "id")
+      Redirect(routes.Application.index).withSession(request.session - "id").flashing("success" -> "You have succesfully been logged out!")
     }
 
 
