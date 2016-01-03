@@ -2,7 +2,6 @@ package models
 
 import anorm.SqlParser._
 import anorm._
-import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import play.api.db._
 
@@ -45,7 +44,7 @@ object User {
     }
 
     user
-      .filter(u => BCrypt.checkpw(password, u.password))
+      .filter(_.password == password)
   }
 
   /**

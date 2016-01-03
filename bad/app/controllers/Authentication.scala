@@ -1,7 +1,6 @@
 package controllers
 
 import models.User
-import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
@@ -15,7 +14,7 @@ class Authentication extends Controller {
       "password" -> nonEmptyText
     )
     ((username, password) =>
-      User(username, BCrypt.hashpw(password, BCrypt.gensalt())))
+      User(username, password))
     ((user: User) =>
       Some(user.username, ""))
   )
