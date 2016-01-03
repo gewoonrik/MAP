@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 class AuthenticatedRequest[A](val user: User, request: Request[A]) extends WrappedRequest[A](request)
 
-object Authenticated extends ActionBuilder[AuthenticatedRequest] {
+object  Authenticated extends ActionBuilder[AuthenticatedRequest] {
   val onUnauthorized = Unauthorized(views.html.defaultpages.unauthorized())
 
   def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]) =
@@ -21,7 +21,7 @@ object Authenticated extends ActionBuilder[AuthenticatedRequest] {
 
 object AuthenticationUtils {
   def fromRequest(requestHeader: RequestHeader) =
-    requestHeader.session.get("username").flatMap(
-      username => User.findByUsername(username)
+    requestHeader.cookies.get("username").flatMap(
+      cookie => User.findByUsername(cookie.value)
     )
 }

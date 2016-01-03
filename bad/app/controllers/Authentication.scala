@@ -67,7 +67,7 @@ class Authentication extends Controller {
     Action {
       implicit request =>
       Redirect(routes.Application.index())
-        .withSession(request.session - "username")
+        .discardingCookies(DiscardingCookie("username"))
         .flashing("success" -> "You have succesfully been logged out!")
     }
 
@@ -78,7 +78,7 @@ class Authentication extends Controller {
       user => {
         Home
           .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
-          .withSession(request.session + ("username" -> user.username))
+          .withCookies(Cookie("username", user.username))
       }
     )
   }
