@@ -24,11 +24,13 @@ object User {
   }
 
   /**
-    * Get a user by its id
+    * Get a user by its username
     */
-  def findById(id: Long) = {
+  def findByUsername(username: String) = {
     DB.withConnection { implicit connection =>
-      SQL("select * from user where id = {id}").on('id -> id).as(simple.singleOpt)
+      SQL("select * from user where username = {username}")
+        .on('username -> username)
+        .as(simple.singleOpt)
     }
   }
 
@@ -39,7 +41,7 @@ object User {
     val user = DB.withConnection { implicit connection =>
       SQL("select * from user where username = {username}")
         .on('username -> username)
-        .as(User.simple.singleOpt)
+        .as(simple.singleOpt)
     }
 
     user
@@ -93,5 +95,4 @@ object User {
       SQL("delete from user where username = {username}").on('username -> username).executeUpdate()
     }
   }
-
 }

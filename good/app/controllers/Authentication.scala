@@ -69,7 +69,7 @@ class Authentication extends Controller {
     Action {
       implicit request =>
       Redirect(routes.Application.index())
-        .withSession(request.session - "id")
+        .withSession(request.session - "username")
         .flashing("success" -> "You have succesfully been logged out!")
     }
 
