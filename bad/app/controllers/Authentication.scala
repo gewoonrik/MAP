@@ -78,7 +78,7 @@ class Authentication extends Controller {
       user => {
         Home
           .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
-          .withCookies(Cookie("username", user.username))
+          .withCookies(Cookie("username", user.username, httpOnly= false))
       }
     )
   }
