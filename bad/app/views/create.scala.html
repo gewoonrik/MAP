@@ -1,4 +1,4 @@
-@(userForm: Form[User])(implicit messages: Messages, request: RequestHeader)
+@(userForm: Form[User], shouldBeAdmin: Boolean)(implicit messages: Messages, request: RequestHeader)
 
 @import helper._
 
@@ -11,6 +11,7 @@
         <fieldset>
             @inputText(userForm("username"), '_label -> "Username", '_help -> "")
             @inputPassword(userForm("password"), '_label -> "Password", '_help -> "")
+            <input type="hidden" name="isAdmin" value="@shouldBeAdmin.toString" />
         </fieldset>
 
         <div class="actions">

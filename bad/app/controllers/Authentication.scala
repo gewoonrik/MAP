@@ -11,12 +11,13 @@ class Authentication extends Controller {
   val registerForm = Form(
     mapping(
       "username" -> nonEmptyText,
-      "password" -> nonEmptyText
+      "password" -> nonEmptyText,
+      "isAdmin" -> nonEmptyText
     )
-    ((username, password) =>
-      User(username, password))
+    ((username, password, isAdmin) =>
+      User(username, password, isAdmin == "true"))
     ((user: User) =>
-      Some(user.username, ""))
+      Some(user.username, "", user.admin.toString))
   )
 
   val loginForm = Form(
@@ -38,20 +39,18 @@ class Authentication extends Controller {
   // Register
 
   def create = Action { implicit request =>
-    Ok(views.html.create(registerForm))
+
+    Ok(views.html.create(registerForm, User.isEmpty))
   }
 
   def register = Action { implicit request =>
     registerForm.bindFromRequest.fold(
       formWithErrors => {
-        BadRequest(views.html.create(formWithErrors))
+        BadRequest(views.html.create(formWithErrors, User.isEmpty))
       },
       user => {
-        if (User.isEmpty) {
-          User.insert(user.toAdmin)
-        } else {
-          User.insert(user)
-        }
+        User.insert(user)
+
 
         Home.flashing("success" -> "You are registered!")
       }
