@@ -16,8 +16,8 @@
         @messages.map {
             case message => {
                 <tr>
-                    <td>@message.user</td>
-                    <td>@message.text</td>
+                    <td>@Html(message.user)</td>
+                    <td>@Html(message.text)</td>
                 </tr>
             }
         }
