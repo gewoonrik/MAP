@@ -7,8 +7,7 @@ import akka.actor.ActorSystem
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, RequestHeader, Controller, WebSocket}
-import play.filters.csrf.{CSRFAddToken, CSRFCheck, CSRFConfig, CSRFAction}
+import play.api.mvc.{Controller, WebSocket}
 
 import scala.concurrent.Future
 
@@ -16,37 +15,20 @@ import scala.concurrent.Future
 class Chat @Inject()(system: ActorSystem) extends Controller {
   val chatRoom = system.actorOf(ChatRoom.props())
 
-  def index = CSRFAddToken {
+  def index =
     Authenticated {
       implicit request =>
         Ok(views.html.chat(request))
     }
-  }
-
-  def csrfConfigThatChecksEverything = CSRFConfig.global.copy(checkMethod = str => true, checkContentType = optStr => true )
 
 
-  def checkCSRF(implicit request : RequestHeader) : Future[Boolean] = {
-    val result = CSRFCheck(
-      Action {
-        Ok("websocket oK")
-      }, config = csrfConfigThatChecksEverything)
 
-
-    result(request)
-      .run
-      .map(result => result.header.status == 200)
-  }
 
   def socket = WebSocket.tryAcceptWithActor[String, JsValue] { implicit reqHeader =>
-    val csrf = checkCSRF
-    val authenticatedActor =  AuthenticationUtils.fromRequest(reqHeader) match {
+    AuthenticationUtils.fromRequest(reqHeader) match {
         case Some(user) => Future(Right(ChatSocket.props(chatRoom, user.username) _))
         case None => Future(Left(Forbidden))
     }
-    csrf.flatMap {
-      case true => authenticatedActor
-      case false => Future(Left(Forbidden))
-    }
+
   }
 }

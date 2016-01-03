@@ -14,7 +14,7 @@
         </ul>
     }
 
-    @form(CSRF(routes.Authentication.authenticate())) {
+    @form(routes.Authentication.authenticate()) {
 
         <fieldset>
             @inputText(userForm("username"), '_label -> "Username", '_help -> "")

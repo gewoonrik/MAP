@@ -13,7 +13,7 @@
         @if(user.isDefined) {
             <li><a href="@routes.Chat.index()">Chat</a></li>
             <li>
-            @form(CSRF(routes.Authentication.logout())) {
+            @form(routes.Authentication.logout()) {
                 <input class="logout-link" type="submit" value="Logout" class="btn primary">
                 }
             </li>

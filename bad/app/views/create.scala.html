@@ -6,7 +6,7 @@
 
     <h1>Register</h1>
 
-    @form(CSRF(routes.Authentication.register())) {
+    @form(routes.Authentication.register()) {
 
         <fieldset>
             @inputText(userForm("username"), '_label -> "Username", '_help -> "")
