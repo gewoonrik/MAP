@@ -16,7 +16,7 @@ class ChatSocket(chatRoom : ActorRef, out : ActorRef, username : String) extends
   implicit val messageDataFormat = Json.format[Message]
   override def receive: Receive = {
     case msg : String => chatRoom ! Message(username ,msg, DateTime.now)
-    case msg: Message => out ! Json.toJson(Message(msg.user, txtmark.Processor.process(msg.text),DateTime.now))
+    case msg: Message => out ! Json.toJson(Message(msg.user, txtmark.Processor.process(msg.text, false),DateTime.now))
   }
 
   override def postStop() = {
