@@ -17,7 +17,7 @@ object User {
     * Parse a User from a ResultSet
     */
   val simple = {
-    get[String]("user.username") ~ get[String]("user.password") ~ get[Boolean]("user.admin") map {
+    get[String]("username") ~ get[String]("password") ~ get[Boolean]("admin") map {
       case username ~ password ~ admin => User(username, password, admin)
     }
   }
@@ -37,14 +37,10 @@ object User {
     * Get a user ID by its username and password
     */
   def findByCredentials(username: String, password: String) = {
-    val user = DB.withConnection { implicit connection =>
-      SQL("select * from user where username = {username}")
-        .on('username -> username)
+    DB.withConnection { implicit connection =>
+      SQL(s"select * from user where username = '${username}' and password = '${password}'")
         .as(simple.singleOpt)
     }
-
-    user
-      .filter(_.password == password)
   }
 
   /**

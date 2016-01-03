@@ -63,19 +63,18 @@ class Authentication extends Controller {
     Ok(views.html.login(loginForm))
   }
 
-  def logout =
-    Action {
-      implicit request =>
-      Redirect(routes.Application.index())
-        .discardingCookies(DiscardingCookie("username"))
-        .flashing("success" -> "You have succesfully been logged out!")
-    }
-
+  def logout = Action { implicit request =>
+    Home
+      .discardingCookies(DiscardingCookie("username"))
+      .flashing("success" -> "You have succesfully been logged out!")
+  }
 
   def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)),
-      user => {
+      u => {
+        val user = User.findByCredentials(u.username, u.password).get
+
         Home
           .flashing("success" -> "Welcome %s, you are now logged in".format(user.username))
           .withCookies(Cookie("username", user.username, httpOnly= false))
